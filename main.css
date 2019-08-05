@@ -7,22 +7,27 @@ ul{
 }
 
 .emojiList{
+    height: 50%;
+    overflow: auto;
+}
+
+ul{
 	display: flex;
 	flex-wrap: wrap;
 }
 
-.emojiList li{
+li{
 	width: 100px;
 	height: 100px;
 	text-align: center;
 	vertical-align: middle;
 }
 
-.emojiList li:hover{
+li:hover{
 	background-color: #D3D3D3;
 }
 
-.emojiList li span{
+li span{
 	display: block;
 }
 

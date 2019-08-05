@@ -1,13 +1,14 @@
 console.log("Script loaded");
 //DOM element
-const emojiListElem = document.querySelector(".emojiList");
+const emojiListElem = document.querySelector(".emojiList > ul");
 const searchInput = document.querySelector("#search-input");
 const categorySelect = document.querySelector("#categories");
-console.log(categorySelect);
+const favoriteListElem = document.querySelector(".favoriteList > ul");
 
 //global variable
 let listOfEmoji;
 let categoryList = [];
+let emojisFavorite = [];
 
 /**
  * fetch api
@@ -23,6 +24,12 @@ function emojiFetch() {
       listOfEmoji = data;
       categoryList = addToCategory(listOfEmoji);
       renderList(listOfEmoji);
+
+      //loading favorite list
+      emojisFavorite = JSON.parse(
+        localStorage.getItem("emojisFavorite") || "[]"
+      );
+      renderList(emojisFavorite, favoriteListElem);
     });
 }
 
@@ -31,8 +38,8 @@ function emojiFetch() {
  *
  * @param {array} listOfEmoji => list of emojis
  */
-function renderList(listOfEmoji) {
-  emojiListElem.innerHTML = "";
+function renderList(listOfEmoji, listElem = emojiListElem) {
+  listElem.innerHTML = "";
 
   //emoji list
   listOfEmoji.forEach(emoji => {
@@ -51,9 +58,10 @@ function renderList(listOfEmoji) {
     //save to clipboard
     emojiElem.addEventListener("click", () => {
       writeToClipboard(emoji.char);
+      saveToFavorite(emoji);
     });
 
-    emojiListElem.appendChild(emojiElem);
+    listElem.appendChild(emojiElem);
   });
 
   //full category select element
@@ -93,6 +101,28 @@ function addToCategory(listOfEmoji) {
     }
   });
   return categoryList;
+}
+
+/**
+ * save a emoji that clicked on localstorage
+ *
+ * @param {Object} emoji => emoji object from json data
+ */
+
+function saveToFavorite(emoji) {
+  //modifying localstorage
+  if (!emojisFavorite.includes(emoji)) {
+    emojisFavorite.push(emoji);
+  }
+
+  if (emojisFavorite.length >= 10) {
+    emojisFavorite.shift();
+  }
+  //saving to localstorage
+  localStorage.setItem("emojisFavorite", JSON.stringify(emojisFavorite));
+
+  //render favorite list
+  renderList(emojisFavorite, favoriteListElem);
 }
 
 searchInput.addEventListener("keyup", () => {
