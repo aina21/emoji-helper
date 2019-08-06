@@ -112,11 +112,11 @@ function addToCategory(listOfEmoji) {
 function saveToFavorite(emoji) {
   //modifying localstorage
   if (!emojisFavorite.includes(emoji)) {
-    emojisFavorite.push(emoji);
+    emojisFavorite.unshift(emoji);
   }
 
   if (emojisFavorite.length >= 10) {
-    emojisFavorite.shift();
+    emojisFavorite.pop();
   }
   //saving to localstorage
   localStorage.setItem("emojisFavorite", JSON.stringify(emojisFavorite));
@@ -125,6 +125,11 @@ function saveToFavorite(emoji) {
   renderList(emojisFavorite, favoriteListElem);
 }
 
+/**
+ * filtered emoji with category
+ *
+ * @returns => list of emoji filtered by category
+ */
 function filterByCategory() {
   let listOfFilteredEmoji;
   if (categorySelect.value === "all") {
