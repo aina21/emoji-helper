@@ -111,10 +111,12 @@ function addToCategory(listOfEmoji) {
 
 function saveToFavorite(emoji) {
   //modifying localstorage
-  if (!emojisFavorite.includes(emoji)) {
-    emojisFavorite.unshift(emoji);
-  }
+  emojisFavorite.unshift(emoji);
 
+  emojisFavorite = emojisFavorite.filter((emoji, index) => {
+    return emojisFavorite.indexOf(emoji) === index;
+  })
+  
   if (emojisFavorite.length >= 10) {
     emojisFavorite.pop();
   }
