@@ -174,3 +174,28 @@ li:hover {
 
 /* ----------------------- */
 /* MEDIA STYLES */
+/* for phone screen */
+@media (max-width: 600px){
+  header{
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 25%;
+  }
+  header .title{
+    font-size: 55px;
+  }
+  .content{
+    flex-direction: column;
+    margin-top: 3rem;
+  }
+  #search-input{
+    border: 0px solid #e8d714;
+  }
+  li{
+    width: 50px;
+    height: 50px;
+  }
+  .emojiName{
+    display: none;
+  }
+}
