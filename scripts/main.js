@@ -2,7 +2,7 @@ console.log("Script loaded");
 //DOM element
 const emojiListElem = document.querySelector(".emojiList > ul");
 const searchInput = document.querySelector("#search-input");
-const categorySelect = document.querySelector("#categories");
+const categorySelect = document.querySelector("#search-categories");
 const favoriteListElem = document.querySelector(".favoriteList > ul");
 
 //global variable
@@ -45,12 +45,12 @@ function renderList(listOfEmoji, listElem = emojiListElem) {
   listOfEmoji.forEach(emoji => {
     const emojiElem = document.createElement("li");
 
-    const emojiSpan = document.createElement("span");
+    const emojiSpan = document.createElement("div");
     emojiSpan.innerHTML = emoji.char;
     emojiSpan.classList.add("emoji");
     emojiElem.appendChild(emojiSpan);
 
-    const nameSpan = document.createElement("span");
+    const nameSpan = document.createElement("div");
     nameSpan.innerHTML = emoji.name;
     nameSpan.classList.add("emojiName");
     emojiElem.appendChild(nameSpan);
@@ -125,22 +125,32 @@ function saveToFavorite(emoji) {
   renderList(emojisFavorite, favoriteListElem);
 }
 
+function filterByCategory() {
+  let listOfFilteredEmoji;
+  if (categorySelect.value === "all") {
+    listOfFilteredEmoji = listOfEmoji;
+  } else {
+    listOfFilteredEmoji = searchEmoji(
+      categorySelect.value,
+      listOfEmoji,
+      "category"
+    );
+  }
+  return listOfFilteredEmoji;
+}
+
 searchInput.addEventListener("keyup", () => {
   const listOfFilteredEmoji = searchEmoji(
     searchInput.value,
-    listOfEmoji,
+    filterByCategory(),
     "name"
   );
   renderList(listOfFilteredEmoji);
 });
 
 categorySelect.addEventListener("change", () => {
-  const listOfFilteredEmoji = searchEmoji(
-    categorySelect.value,
-    listOfEmoji,
-    "category"
-  );
-  renderList(listOfFilteredEmoji);
+  searchInput.value = "";
+  renderList(filterByCategory());
 });
 
 emojiFetch();

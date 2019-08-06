@@ -9,29 +9,39 @@
       href="https://fonts.googleapis.com/css?family=Roboto"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="main.css" />
+    <link rel="stylesheet" href="assets/styles/main.css" />
   </head>
   <body>
+    <header>
+      <section class="center title">
+        Emojiiiiii
+      </section>
+    </header>
     <main>
-      <label>
-        Search:
-        <input type="text" id="search-input" />
-      </label>
-      <label>
-        categories:
-        <select id="categories"></select>
-      </label>
-      <div class="emojiList">
-          clicked emoji to copy:
-        <ul></ul>
-      </div>
-      <div class="favoriteList">
-          Favorites:
-        <ul></ul>
-      </div>
+      <section class="center content">
+        <div class="search">
+          <span><i class="fa fa-search"></i></span>
+          <input type="text" id="search-input" />
+        </div>
+        <div class="categories">
+          <select id="search-categories">
+            <option value="all">All categories</option>
+          </select>
+        </div>
+      </section>
+      <section class="emoji-view">
+        <section class="emojiList">
+          <h2>clicked emoji to copy</h2>
+          <ul></ul>
+        </section>
+        <section class="favoriteList">
+          <h2>Favorites</h2>
+          <ul></ul>
+        </section>
+      </section>
     </main>
 
-    <script src="main.js"></script>
-    <script src="copy-to-clipboard.js"></script>
+    <script src="scripts/main.js"></script>
+    <script src="scripts/copy-to-clipboard.js"></script>
   </body>
 </html>
