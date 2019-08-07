@@ -7,7 +7,7 @@ const favoriteListElem = document.querySelector(".favoriteList > ul");
 
 //global variable
 let listOfEmoji;
-let categoryList = [];
+
 let emojisFavorite = [];
 
 /**
@@ -22,14 +22,22 @@ function emojiFetch() {
     .then(response => response.json())
     .then(data => {
       listOfEmoji = data;
-      categoryList = addToCategory(listOfEmoji);
-      renderList(listOfEmoji);
 
       //loading favorite list
       emojisFavorite = JSON.parse(
         localStorage.getItem("emojisFavorite") || "[]"
       );
+      
+      //full category select element
+      const categoryList = addToCategory(listOfEmoji);
+      categoryList.forEach(category => {
+        const categoryElem = document.createElement("option");
+        categoryElem.innerHTML = category;
+        categorySelect.appendChild(categoryElem);
+      });
+
       renderList(emojisFavorite, favoriteListElem);
+      renderList(listOfEmoji);
     });
 }
 
@@ -63,13 +71,6 @@ function renderList(listOfEmoji, listElem = emojiListElem) {
 
     listElem.appendChild(emojiElem);
   });
-
-  //full category select element
-  categoryList.forEach(category => {
-    const categoryElem = document.createElement("option");
-    categoryElem.innerHTML = category;
-    categorySelect.appendChild(categoryElem);
-  });
 }
 
 /**
@@ -95,7 +96,7 @@ function searchEmoji(searchStr, listOfEmoji, searchOption) {
 function addToCategory(listOfEmoji) {
   let categoryList = [];
   listOfEmoji.forEach(emoji => {
-    const category = emoji.category;
+    const category = emoji.category.split("(")[0];
     if (!categoryList.includes(category)) {
       categoryList.push(category);
     }
@@ -115,8 +116,8 @@ function saveToFavorite(emoji) {
 
   emojisFavorite = emojisFavorite.filter((emoji, index) => {
     return emojisFavorite.indexOf(emoji) === index;
-  })
-  
+  });
+
   if (emojisFavorite.length >= 10) {
     emojisFavorite.pop();
   }
