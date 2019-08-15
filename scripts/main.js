@@ -27,7 +27,7 @@ function emojiFetch() {
       emojisFavorite = JSON.parse(
         localStorage.getItem("emojisFavorite") || "[]"
       );
-      
+
       //full category select element
       const categoryList = addToCategory(listOfEmoji);
       categoryList.forEach(category => {
@@ -49,19 +49,34 @@ function emojiFetch() {
 function renderList(listOfEmoji, listElem = emojiListElem) {
   listElem.innerHTML = "";
 
+  listOfEmoji = chunkEmojiList(listOfEmoji, 30);
   //emoji list
-  listOfEmoji.forEach(emoji => {
+  listOfEmoji.forEach(list => {
+    setTimeout(() => {
+      createEmojiList(list, listElem);
+    }, 0);
+  });
+}
+
+/**
+ * load batch of data in list on html
+ *
+ * @param {array} list
+ * @param {DomElement} listElem
+ */
+function createEmojiList(list, listElem) {
+  list.forEach(emoji => {
     const emojiElem = document.createElement("li");
 
-    const emojiSpan = document.createElement("div");
-    emojiSpan.innerHTML = emoji.char;
-    emojiSpan.classList.add("emoji");
-    emojiElem.appendChild(emojiSpan);
+    const emojiDiv = document.createElement("div");
+    emojiDiv.innerHTML = emoji.char;
+    emojiDiv.classList.add("emoji");
+    emojiElem.appendChild(emojiDiv);
 
-    const nameSpan = document.createElement("div");
-    nameSpan.innerHTML = emoji.name;
-    nameSpan.classList.add("emojiName");
-    emojiElem.appendChild(nameSpan);
+    const nameDiv = document.createElement("div");
+    nameDiv.innerHTML = emoji.name;
+    nameDiv.classList.add("emojiName");
+    emojiElem.appendChild(nameDiv);
 
     //save to clipboard
     emojiElem.addEventListener("click", () => {
@@ -72,7 +87,6 @@ function renderList(listOfEmoji, listElem = emojiListElem) {
     listElem.appendChild(emojiElem);
   });
 }
-
 /**
  * filter emojis
  *
@@ -85,6 +99,22 @@ function searchEmoji(searchStr, listOfEmoji, searchOption) {
   return listOfEmoji.filter(emoji => {
     return emoji[searchOption].includes(searchStr);
   });
+}
+
+/**
+ * chunk a emoji list
+ *
+ * @param {array} list
+ * @param {number} sizeOfChunk
+ * @returns chunked array
+ */
+function chunkEmojiList(list, sizeOfChunk) {
+  let result = [];
+  for (let i = 0; i < list.length; i += sizeOfChunk) {
+    let chunk = list.slice(i, i + sizeOfChunk);
+    result.push(chunk);
+  }
+  return result;
 }
 
 /**
